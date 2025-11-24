@@ -1067,7 +1067,7 @@
     <script>
         // Progress tracking
         const totalQuestions = 20;
-        const totalFields = 6; // personal info fields
+        const totalFields = 1; // personal info fields
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
         
@@ -1082,7 +1082,7 @@
             
             // Count completed personal info fields
             let completedFields = 0;
-            const personalFields = ['name', 'email', 'business', 'role', 'industry', 'orgSize'];
+            const personalFields = ['name'];
             personalFields.forEach(field => {
                 const input = document.getElementById(field);
                 if (input && input.value.trim()) completedFields++;
