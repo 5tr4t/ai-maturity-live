@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Maturity Assessment</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .survey-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f3f4;
+        }
+
+        .header h1 {
+            font-size: 2.4em;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            color: #666;
+            line-height: 1.5;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            margin-bottom: 0;
+        }
+
+        body {
+            padding-top: 80px; /* Add space for fixed progress bar */
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f1f3f4;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00D1FF 0%, #0099cc 100%);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #00D1FF;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f3f4;
+        }
+
+        .question-group {
+            margin-bottom: 35px;
+            padding: 25px;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            background: #fafbfc;
+        }
+
+        .question-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .clarification-note {
+            font-size: 0.7em;
+            color: #999999;
+            margin-top: 0px;
+            margin-bottom: 10px;
+            font-style: italic;
+            }
+        
+        .scale-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .scale-labels {
+            display: grid;
+            grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr;
+            gap: 0;
+            margin-bottom: 15px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .scale-labels span {
+            font-weight: 500;
+            padding: 0 5px;
+            line-height: 1.3;
+        }
+
+        .scale-labels span:nth-child(1) {
+            text-align: left;
+            grid-column: 1;
+        }
+
+        .scale-labels span:nth-child(2) {
+            text-align: center;
+            grid-column: 3;
+        }
+
+        .scale-labels span:nth-child(3) {
+            text-align: right;
+            grid-column: 5;
+        }
+               
+        .radio-scale {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .radio-option {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"] {
+            opacity: 0;
+            position: absolute;
+            width: 0;
+            height: 0;
+        }
+
+        .radio-option label {
+            display: block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            background: white;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            border-color: #00D1FF;
+            background: #00D1FF;
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 209, 255, 0.3);
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-top: 40px;
+        }
+
+        .form-section h3 {
+            color: #00D1FF;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1em;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00D1FF;
+            box-shadow: 0 0 0 3px rgba(0, 209, 255, 0.1);
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #f1f3f4;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #00D1FF 0%, #0099cc 100%);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 209, 255, 0.3);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 209, 255, 0.4);
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .scale-labels span {
+                font-size: 0.8em;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .survey-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="survey-card">
+            <div class="header">
+                <h1>AI Maturity Assessment</h1>
+                <p>Understanding your progress along the AI journey, identifying key accomplishments and areas you could focus on to accelerate.</p>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">0% Complete</div>
+            </div>
+
+            <form id="surveyForm">
+                <!-- Section 1: AI Vision and Strategy -->
+                <div class="section">
+                    <h2 class="section-title">Section 1: AI Vision and Strategy</h2>
+
+                    <div class="question-group">
+                        <div class="question-title">1. Do you have a published AI vision and strategy?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No, one does not exist</span>
+                                <span>AI is mentioned in our corporate vision and strategy</span>
+                                <span>Yes, we have an AI-specific vision and strategy</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="1" id="q1_1">
+                                    <label for="q1_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="2" id="q1_2">
+                                    <label for="q1_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="3" id="q1_3">
+                                    <label for="q1_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="4" id="q1_4">
+                                    <label for="q1_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q1" value="5" id="q1_5">
+                                    <label for="q1_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">2. Do you have an agreed investment appetite for AI?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No, there is no separate or specific investment pot for AI</span>
+                                <span>Yes, there is a general allocation for AI</span>
+                                <span>Yes, AI is one of our top priority investments with dedicated budget</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q2" value="1" id="q2_1">
+                                    <label for="q2_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q2" value="2" id="q2_2">
+                                    <label for="q2_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q2" value="3" id="q2_3">
+                                    <label for="q2_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q2" value="4" id="q2_4">
+                                    <label for="q2_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q2" value="5" id="q2_5">
+                                    <label for="q2_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">3. Do you have an agreed risk appetite for AI?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No formal risk appetite has been defined for AI</span>
+                                <span>Basic risk considerations are discussed informally</span>
+                                <span>Clear AI risk appetite is formally defined and approved</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q3" value="1" id="q3_1">
+                                    <label for="q3_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q3" value="2" id="q3_2">
+                                    <label for="q3_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q3" value="3" id="q3_3">
+                                    <label for="q3_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q3" value="4" id="q3_4">
+                                    <label for="q3_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q3" value="5" id="q3_5">
+                                    <label for="q3_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">4. Is AI embedded into your functional strategies?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>AI is not considered in functional strategies</span>
+                                <span>Some functions mention AI in their strategies</span>
+                                <span>AI is systematically integrated across all functional strategies</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q4" value="1" id="q4_1">
+                                    <label for="q4_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q4" value="2" id="q4_2">
+                                    <label for="q4_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q4" value="3" id="q4_3">
+                                    <label for="q4_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q4" value="4" id="q4_4">
+                                    <label for="q4_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q4" value="5" id="q4_5">
+                                    <label for="q4_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">5. Does the organisation have a common understanding of the AI vision and strategy?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No communication has been done internally or externally</span>
+                                <span>Vision has been shared but understanding varies significantly</span>
+                                <span>Clear, consistent understanding across all levels of the organisation</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q5" value="1" id="q5_1">
+                                    <label for="q5_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q5" value="2" id="q5_2">
+                                    <label for="q5_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q5" value="3" id="q5_3">
+                                    <label for="q5_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q5" value="4" id="q5_4">
+                                    <label for="q5_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q5" value="5" id="q5_5">
+                                    <label for="q5_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Leadership and Team -->
+                <div class="section">
+                    <h2 class="section-title">Section 2: Leadership and Team</h2>
+
+                    <div class="question-group">
+                        <div class="question-title">6. What is the executive leadership's level of knowledge and comfort with AI?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Limited knowledge and uncomfortable with AI decisions</span>
+                                <span>Basic understanding and moderate comfort level</span>
+                                <span>Deep knowledge and actively championing AI initiatives</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q6" value="1" id="q6_1">
+                                    <label for="q6_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q6" value="2" id="q6_2">
+                                    <label for="q6_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q6" value="3" id="q6_3">
+                                    <label for="q6_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q6" value="4" id="q6_4">
+                                    <label for="q6_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q6" value="5" id="q6_5">
+                                    <label for="q6_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">7. Who is accountable for AI in the organisation?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No clear ownership - everyone/no one is responsible</span>
+                                <span>Shared responsibility across multiple executives</span>
+                                <span>Named executive with clear accountability for AI deployment</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q7" value="1" id="q7_1">
+                                    <label for="q7_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q7" value="2" id="q7_2">
+                                    <label for="q7_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q7" value="3" id="q7_3">
+                                    <label for="q7_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q7" value="4" id="q7_4">
+                                    <label for="q7_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q7" value="5" id="q7_5">
+                                    <label for="q7_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">8. Do you understand the impact of AI on employees across the organisation?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No work has been done on this</span>
+                                <span>Basic assessment of potential impacts completed</span>
+                                <span>In-depth study on role changes and future skills requirements completed</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q8" value="1" id="q8_1">
+                                    <label for="q8_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q8" value="2" id="q8_2">
+                                    <label for="q8_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q8" value="3" id="q8_3">
+                                    <label for="q8_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q8" value="4" id="q8_4">
+                                    <label for="q8_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q8" value="5" id="q8_5">
+                                    <label for="q8_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">9. What is the current team's capability with regards to AI usage?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Individual basis usage only, no formal support</span>
+                                <span>Some training courses provided, basic capability building</span>
+                                <span>Core part of roles with measurement and incentives in place</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q9" value="1" id="q9_1">
+                                    <label for="q9_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q9" value="2" id="q9_2">
+                                    <label for="q9_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q9" value="3" id="q9_3">
+                                    <label for="q9_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q9" value="4" id="q9_4">
+                                    <label for="q9_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q9" value="5" id="q9_5">
+                                    <label for="q9_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">10. How would you rate the team's culture and openness to AI-driven change?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Reluctant and resistant to AI-driven change</span>
+                                <span>Cautiously accepting of AI initiatives</span>
+                                <span>Embracing and actively driving AI transformation</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q10" value="1" id="q10_1">
+                                    <label for="q10_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q10" value="2" id="q10_2">
+                                    <label for="q10_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q10" value="3" id="q10_3">
+                                    <label for="q10_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q10" value="4" id="q10_4">
+                                    <label for="q10_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q10" value="5" id="q10_5">
+                                    <label for="q10_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Data and Technology -->
+                <div class="section">
+                    <h2 class="section-title">Section 3: Data and Technology</h2>
+
+                    <div class="question-group">
+                        <div class="question-title">11. How would you rate the availability and quality of your organisation's data for AI solutions?</div>
+                        <p class="clarification-note">(Consider the completeness, accessibility, and timeliness of data from across relevant sources in the organisation, such as customer data, sales data, etc.)</p>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Poor data quality and limited availability</span>
+                                <span>Adequate data with some quality issues</span>
+                                <span>High-quality, comprehensive data readily available</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q11" value="1" id="q11_1">
+                                    <label for="q11_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q11" value="2" id="q11_2">
+                                    <label for="q11_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q11" value="3" id="q11_3">
+                                    <label for="q11_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q11" value="4" id="q11_4">
+                                    <label for="q11_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q11" value="5" id="q11_5">
+                                    <label for="q11_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">12. Do you have access to comprehensive data sources for AI development?</div>
+                        <p class="clarification-note">(Training and fine-tuning AI solutions requires considerable amounts of data. Consider the availability and accessibility of internal and external data sources that can be used to develop your AI solutions.)</p>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Limited access to basic operational data only</span>
+                                <span>Access to historical and current transactional data</span>
+                                <span>Full access to historical, transactional, and proprietary external data</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q12" value="1" id="q12_1">
+                                    <label for="q12_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q12" value="2" id="q12_2">
+                                    <label for="q12_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q12" value="3" id="q12_3">
+                                    <label for="q12_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q12" value="4" id="q12_4">
+                                    <label for="q12_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q12" value="5" id="q12_5">
+                                    <label for="q12_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">13. How ready is your technology stack for AI solutions?</div>
+                        <p class="clarification-note">(Consider how modern your technology infrastructure is. Legacy systems usually cannot easily integrate AI solutions, while modern cloud-based infrastructure may already have built-in access to AI-ready platforms.)</p>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Legacy systems with no AI-ready infrastructure</span>
+                                <span>Some modern systems with basic AI capabilities</span>
+                                <span>AI-first architecture with access to LLMs and advanced tools</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q13" value="1" id="q13_1">
+                                    <label for="q13_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q13" value="2" id="q13_2">
+                                    <label for="q13_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q13" value="3" id="q13_3">
+                                    <label for="q13_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q13" value="4" id="q13_4">
+                                    <label for="q13_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q13" value="5" id="q13_5">
+                                    <label for="q13_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">14. Have you set up a sandbox environment to safely trial and test AI solutions?</div>
+                        <p class="clarification-note">(This refers to an isolated virtual environment to safely run code, test software applications, or analyse security threats without affecting the main system or production environment.)</p>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No dedicated environment for AI experimentation</span>
+                                <span>Basic testing environment with limited capabilities</span>
+                                <span>Comprehensive sandbox with full AI development capabilities</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q14" value="1" id="q14_1">
+                                    <label for="q14_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q14" value="2" id="q14_2">
+                                    <label for="q14_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q14" value="3" id="q14_3">
+                                    <label for="q14_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q14" value="4" id="q14_4">
+                                    <label for="q14_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q14" value="5" id="q14_5">
+                                    <label for="q14_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">15. Does your IT team have the capability to run an agile AI development process?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No AI development capability or agile processes</span>
+                                <span>Basic capability with some agile practices</span>
+                                <span>Full capability to run an agile 'AI use case factory'</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q15" value="1" id="q15_1">
+                                    <label for="q15_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q15" value="2" id="q15_2">
+                                    <label for="q15_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q15" value="3" id="q15_3">
+                                    <label for="q15_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q15" value="4" id="q15_4">
+                                    <label for="q15_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q15" value="5" id="q15_5">
+                                    <label for="q15_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: AI Operating Model and Governance -->
+                <div class="section">
+                    <h2 class="section-title">Section 4: AI Operating Model and Governance</h2>
+
+                    <div class="question-group">
+                        <div class="question-title">16. Is there a central AI Center of Excellence responsible for AI initiatives?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No central team - AI initiatives are completely decentralized</span>
+                                <span>Informal coordination between teams working on AI</span>
+                                <span>Established AI CoE responsible for curation, selection, development, and deployment</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q16" value="1" id="q16_1">
+                                    <label for="q16_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q16" value="2" id="q16_2">
+                                    <label for="q16_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q16" value="3" id="q16_3">
+                                    <label for="q16_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q16" value="4" id="q16_4">
+                                    <label for="q16_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q16" value="5" id="q16_5">
+                                    <label for="q16_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">17. Has a future organisation model been developed with an 'AI-first' view?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No consideration of AI impact on organisation structure</span>
+                                <span>Basic assessment of how AI might change the organisation</span>
+                                <span>Comprehensive 'AI-first' organisational blueprint developed</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q17" value="1" id="q17_1">
+                                    <label for="q17_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q17" value="2" id="q17_2">
+                                    <label for="q17_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q17" value="3" id="q17_3">
+                                    <label for="q17_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q17" value="4" id="q17_4">
+                                    <label for="q17_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q17" value="5" id="q17_5">
+                                    <label for="q17_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">18. How are AI initiatives monitored and managed?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>Use cases deployed on an ad-hoc basis with no coordination</span>
+                                <span>Basic project management with informal prioritization</span>
+                                <span>Full investment committee model with backlog grooming and portfolio management</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q18" value="1" id="q18_1">
+                                    <label for="q18_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q18" value="2" id="q18_2">
+                                    <label for="q18_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q18" value="3" id="q18_3">
+                                    <label for="q18_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q18" value="4" id="q18_4">
+                                    <label for="q18_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q18" value="5" id="q18_5">
+                                    <label for="q18_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">19. Do you understand AI-specific risks and regulatory requirements?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No assessment of AI risks or regulatory requirements</span>
+                                <span>Basic awareness of AI risks and some regulatory considerations</span>
+                                <span>Comprehensive understanding of AI risks and full regulatory compliance</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q19" value="1" id="q19_1">
+                                    <label for="q19_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q19" value="2" id="q19_2">
+                                    <label for="q19_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q19" value="3" id="q19_3">
+                                    <label for="q19_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q19" value="4" id="q19_4">
+                                    <label for="q19_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q19" value="5" id="q19_5">
+                                    <label for="q19_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question-title">20. Have specific AI-related controls been defined and implemented?</div>
+                        <div class="scale-container">
+                            <div class="scale-labels">
+                                <span>No AI-specific controls in place</span>
+                                <span>Basic controls identified but inconsistently implemented</span>
+                                <span>Comprehensive AI controls defined and systematically implemented</span>
+                            </div>
+                            <div class="radio-scale">
+                                <div class="radio-option">
+                                    <input type="radio" name="q20" value="1" id="q20_1">
+                                    <label for="q20_1">1</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q20" value="2" id="q20_2">
+                                    <label for="q20_2">2</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q20" value="3" id="q20_3">
+                                    <label for="q20_3">3</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q20" value="4" id="q20_4">
+                                    <label for="q20_4">4</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" name="q20" value="5" id="q20_5">
+                                    <label for="q20_5">5</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h3>Personal Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="business">Business/Organisation Name *</label>
+                            <input type="text" id="business" name="business" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Your Role/Title *</label>
+                            <input type="text" id="role" name="role" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="industry">Industry Sector *</label>
+                            <select id="industry" name="industry" required>
+                                <option value="">Select Industry</option>
+                                <option value="technology">Technology</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="finance">Financial Services</option>
+                                <option value="retail">Retail & E-commerce</option>
+                                <option value="manufacturing">Manufacturing</option>
+                                <option value="consulting">Consulting</option>
+                                <option value="education">Education</option>
+                                <option value="government">Government</option>
+                                <option value="energy">Energy & Utilities</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="orgSize">Organisation Size *</label>
+                            <select id="orgSize" name="orgSize" required>
+                                <option value="">Select Size</option>
+                                <option value="1-50">1-50 employees</option>
+                                <option value="51-200">51-200 employees</option>
+                                <option value="201-1000">201-1000 employees</option>
+                                <option value="1000+">1000+ employees</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="companyCode" name="companyCode" />
+                
+                <!-- Submit Section -->
+                <div class="submit-section">
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        Submit Assessment
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+      window.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get('companyCode');
+        if (code) {
+          document.getElementById('companyCode').value = code;
+        }
+      });
+    </script>
+    
+    <script>
+        // Progress tracking
+        const totalQuestions = 20;
+        const totalFields = 6; // personal info fields
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        
+        function updateProgress() {
+            // Count completed questions (1-20)
+            let completedQuestions = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                const questionInputs = document.querySelectorAll(`input[name="q${i}"]`);
+                const isAnswered = Array.from(questionInputs).some(input => input.checked);
+                if (isAnswered) completedQuestions++;
+            }
+            
+            // Count completed personal info fields
+            let completedFields = 0;
+            const personalFields = ['name', 'email', 'business', 'role', 'industry', 'orgSize'];
+            personalFields.forEach(field => {
+                const input = document.getElementById(field);
+                if (input && input.value.trim()) completedFields++;
+            });
+            
+            const totalItems = totalQuestions + totalFields;
+            const completedItems = completedQuestions + completedFields;
+            const percentage = Math.round((completedItems / totalItems) * 100);
+            
+            progressFill.style.width = percentage + '%';
+            progressText.textContent = percentage + '% Complete';
+            
+            // Enable/disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            if (percentage === 100) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+        
+        // Add event listeners to all form inputs
+        document.addEventListener('change', updateProgress);
+        document.addEventListener('input', updateProgress);
+        
+        // Form submission
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect all form data
+            const formData = new FormData(this);
+            const data = {};
+            
+            // Get all responses
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            console.log('Survey Data:', data);
+            
+            // Here you would typically send the data to your n8n webhook
+            // Replace 'YOUR_N8N_WEBHOOK_URL' with your actual webhook URL
+            
+            
+            fetch('https://str4t.app.n8n.cloud/webhook-test/bc1d81d2-08c4-40b4-a5f8-f9dbc7a04746', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Success:', result);
+                // Redirect to results page or show success message
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            
+            
+            // For now, show success message
+            alert('Thank you! Your AI Maturity Assessment has been submitted successfully. Once all responses are received, we will prepare the report and send it to the survey organiser.');
+        });
+        
+        // Initialize progress on page load
+        updateProgress();
+    </script>
+</body>
+</html>
